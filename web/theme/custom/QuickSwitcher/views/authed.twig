@@ -1,0 +1,133 @@
+{#
+/**
+ * Copyright (C) 2020-2024 Xibo Signage Ltd
+ *
+ * Xibo - Digital Signage - https://xibosignage.com
+ *
+ * This file is part of Xibo.
+ *
+ * Xibo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * Xibo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Xibo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+{% extends "base.twig" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/theme/custom/QuickSwitcher/QuickSwitcher.css" />
+<script src="/theme/custom/QuickSwitcher/QuickSwitcher.js" nonce="{{ cspNonce }}"></script>
+
+    {% set horizontalNav = currentUser.getOptionValue("navigationMenuPosition", theme.getSetting("NAVIGATION_MENU_POSITION", "vertical")) == "horizontal" %}
+
+    {% if not hideNavigation %}
+        {% set hideNavigation = currentUser.getOptionValue("hideNavigation", "0") %}
+    {% endif %}
+
+    <div {% if hideNavigation == "0" and not horizontalNav and not forceHide %}id="page-wrapper"{% endif %} class="active">
+
+        {% if hideNavigation == "0" and not forceHide %}
+            {% if horizontalNav %}
+                <nav class="navbar navbar-default navbar-expand-lg">
+                    <a class="navbar-brand xibo-logo-container" href="#">
+                        <img class="xibo-logo" src="{{ theme.uri("img/xibologo.png") }}">
+                    </a>
+
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse-1" aria-controls="navbarNav" aria-expanded="false">
+                        <span class="fa fa-bars"></span>
+                    </button>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="navbar-collapse collapse justify-content-between" id="navbar-collapse-1">
+                        {% include "authed-topbar.twig" %}
+
+                        <ul class="nav navbar-nav navbar-right">
+                            {% include "authed-theme-topbar.twig" ignore missing %}
+                            {% if currentUser.featureEnabled("drawer") %}
+                                {% include "authed-notification-drawer.twig" %}
+                            {% endif %}
+                            {% include "authed-user-menu.twig" %}
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </nav>
+            {% else %}
+                <div class="navbar-collapse navbar-collapse-side collapse" id="navbar-collapse-1">
+                    {% include "authed-sidebar.twig" %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <div id="content-wrapper">
+            <div class="page-content">
+                {% if not horizontalNav or hideNavigation == "1" or forceHide %}
+                <div class="row header header-side">
+                    <div class="col-sm-12">
+                        <div class="meta pull-left xibo-logo-container">
+                            <div class="page"><img class="xibo-logo" src="{{ theme.uri("img/xibologo.png") }}"></div>
+                        </div>
+                        {% if not forceHide %}
+                            {% if not hideNavigation == "1" %}
+                                <button type="button" class="pull-right navbar-toggler navbar-toggler-side" data-toggle="collapse" data-target="#navbar-collapse-1" aria-controls="navbarNav" aria-expanded="false">
+                                    <span class="fa fa-bars"></span>
+                                </button>
+                            {% endif %}
+                            <div class="user pull-right">
+                                {% include "authed-user-menu.twig" %}
+                            </div>
+                            {% if currentUser.featureEnabled("drawer") %}
+                            <div class="user user-notif pull-right">
+                                {% include "authed-notification-drawer.twig" %}
+                            </div>
+                            {% endif %}
+                            {% include "authed-theme-topbar.twig" ignore missing %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% block actionMenu %}{% endblock %}
+                        {% block pageContent %}{% endblock %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% block pageFooter %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% set helpLinks = helpService.getLinksForPage(route) %}
+    {% set faultViewEnabled = currentUser.featureEnabled("fault.view") %}
+
+    {# Hide in mobile view (sm/<768px)  #}
+    <div id="help-pane" class="d-none d-md-flex help-pane"
+        data-help-links="{{ helpLinks|json_encode }}"
+        data-url-help-landing-page={{ helpService.getLandingPage() }}
+        data-fault-view-enabled={{faultViewEnabled}}
+        data-fault-view-url={{ url_for("fault.view") }}
+    >
+        <div class="help-pane-container" style="display: none;">
+        </div>
+        <div class="help-pane-btn">
+            <i class="fas fa-question"></i>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javaScriptTemplates %}
+    {# File upload templates and scripts #}
+    {% include "include-file-upload.twig" %}
+{% endblock %}
