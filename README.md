@@ -21,6 +21,7 @@ This project works both on docker and custom Xibo CMS installations.
 - Copy both folders to your Xibo CMS installation directory. (``shared/cms``)
 - Ensure www-data has ownership. ``chown -R www-data:www-data /shared/cms``
 - Enable the QuickSwitcher in the web interface under: ``Settings -> CMS Theme -> Quick Switcher``
+- Reload the page.
 
 ## Usage
 
