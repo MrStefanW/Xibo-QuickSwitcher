@@ -10,6 +10,7 @@ A small helper for Xibo CMS that provides a quick navigation UI.
 
 - This Quick Switcher has been tested on Xibo version 4.3.1 only. It may work with all Xibo 4 versions, but it may not with any version below that.
 - Ensure that you don't accidentally overwrite your own settings-custom.php
+- At this moment, it is advised to have "All folders" checked, unless everything is within a single folder.
 
 
 ## Installation
