@@ -2,7 +2,7 @@
 
 A small proof-of-concept helper for Xibo CMS that provides a quick navigation UI.
 
-**Note:** A pull request has been created to integrate this functionality directly into Xibo CMS ([#3162](https://github.com/xibosignage/xibo-cms/pull/3162)). This repository is intended only as a standalone prototype/demo.
+**Note:** A pull request has been created to integrate this functionality directly into Xibo CMS ([#3170](https://github.com/xibosignage/xibo-cms/pull/3170)). This repository is intended only as a standalone prototype/demo.
 
 ![Image](https://i.imgur.com/WrX4JEO.png)
 
