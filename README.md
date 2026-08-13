@@ -19,7 +19,7 @@ This project works both on docker and custom Xibo CMS installations.
 - Download both folders from this repository.
 - Upload the folders and their contents to your server.
 - Append the code from settings-custom.php to your settings-custom. Don't overwrite it!
-- Copy both folders to your Xibo CMS installation directory. (``shared/cms/custom``)
+- Copy all files to your Xibo CMS installation directory. (``shared/cms/custom``)
 - Ensure www-data has ownership. ``chown -R www-data:www-data /shared/cms``
 - Give the page a hard refresh.
 
