@@ -1,8 +1,6 @@
-# Quick Switcher for Xibo CMS (proof-of-concept)
+# Quick Switcher for Xibo CMS
 
-A small proof-of-concept helper for Xibo CMS that provides a quick navigation UI.
-
-**Note:** A pull request has been created to integrate this functionality directly into Xibo CMS ([#3170](https://github.com/xibosignage/xibo-cms/pull/3170)). This repository is intended only as a standalone prototype/demo.
+A small helper for Xibo CMS that provides a quick navigation UI.
 
 ![Image](https://i.imgur.com/WrX4JEO.png)
 
@@ -10,10 +8,8 @@ A small proof-of-concept helper for Xibo CMS that provides a quick navigation UI
 
 ## Important note
 
-- This no longer works since version 4.5.0, as Xibo has changed how custom themes work.
-- This Quick Switcher has been tested with all versions between Xibo 4.3.1 and 4.4.5 
-- Ensure that you don't accidentally overwrite your own settings-custom.php
-- At this moment, it is advised to have "All folders" checked, unless everything is within a single folder.
+- This version is for Xibo 4.5.0 and beyond. For older Xibo 4 installations, check the [releases](https://github.com/MrStefanW/Xibo-QuickSwitcher/releases/tag/Release).
+- Ensure that you don't accidentally overwrite your own settings-custom.php, only append the contents to your file.
 
 
 ## Installation
@@ -22,10 +18,9 @@ This project works both on docker and custom Xibo CMS installations.
 
 - Download both folders from this repository.
 - Upload the folders and their contents to your server.
-- Copy both folders to your Xibo CMS installation directory. (``shared/cms``)
+- Copy both folders to your Xibo CMS installation directory. (``shared/cms/custom``)
 - Ensure www-data has ownership. ``chown -R www-data:www-data /shared/cms``
-- Enable the QuickSwitcher in the web interface under: ``Settings -> CMS Theme -> Quick Switcher``
-- Reload the page.
+- Give the page a hard refresh.
 
 ## Usage
 

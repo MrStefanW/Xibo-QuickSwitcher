@@ -15,6 +15,8 @@ class QuickSwitcherMiddleware implements MiddlewareInterface
 {
     use CustomMiddlewareTrait;
 
+    private const ASSET_DIRECTORY = PROJECT_ROOT . '/custom/QuickSwitcher/';
+
     /**
      * @param Request $request
      * @param Handler $handler
@@ -42,8 +44,8 @@ class QuickSwitcherMiddleware implements MiddlewareInterface
         });
 
         $request = $this->appendPublicRoutes($request, [
-            '/QuickSwitcher/assets',
-            '/QuickSwitcher/assets/{file}'
+            '/QuickSwitcher/assets/QuickSwitcher.css',
+            '/QuickSwitcher/assets/QuickSwitcher.js'
         ]);
 
         return $handler->handle($request);
@@ -60,24 +62,40 @@ class QuickSwitcherMiddleware implements MiddlewareInterface
             ->setName('quickSwitcher.search');
 
         $this->getApp()
-            ->get('/QuickSwitcher/assets/{file:.+}', function ($request, $response, $args) {
-                $file = $args['file'] ?? '';
-                $path = PROJECT_ROOT . '/web/theme/custom/QuickSwitcher/' . $file;
-
-                if (!file_exists($path) || !is_file($path)) {
-                    return $response->withStatus(404);
-                }
-
-                $mime = mime_content_type($path) ?: 'application/octet-stream';
-                $contents = file_get_contents($path);
-
-                $response = $response->withHeader('Content-Type', $mime);
-                $response->getBody()->write($contents);
-
-                return $response;
+            ->get('/QuickSwitcher/assets/QuickSwitcher.css', function ($request, $response) {
+                return $this->serveAsset($response, 'QuickSwitcher.css', 'text/css; charset=utf-8');
             })
-            ->setName('quickSwitcher.assets');
+            ->setName('quickSwitcher.assets.css');
+
+        $this->getApp()
+            ->get('/QuickSwitcher/assets/QuickSwitcher.js', function ($request, $response) {
+                return $this->serveAsset($response, 'QuickSwitcher.js', 'application/javascript; charset=utf-8');
+            })
+            ->setName('quickSwitcher.assets.js');
 
         return $this;
+    }
+
+    private function serveAsset(Response $response, string $fileName, string $contentType): Response
+    {
+        $path = self::ASSET_DIRECTORY . $fileName;
+
+        if (!is_file($path) || !is_readable($path)) {
+            return $response->withStatus(404);
+        }
+
+        $contents = @file_get_contents($path);
+        if ($contents === false) {
+            return $response->withStatus(500);
+        }
+
+        $response = $response
+            ->withHeader('Content-Type', $contentType)
+            ->withHeader('X-Content-Type-Options', 'nosniff')
+            ->withHeader('Cache-Control', 'public, max-age=3600');
+
+        $response->getBody()->write($contents);
+
+        return $response;
     }
 }
